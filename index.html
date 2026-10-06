@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ኮተቤ እድር Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0088cc;
+            --accent-blue: #0056b3;
+            --bg-light: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --success-green: #22c55e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 16px;
+            padding-bottom: 80px; /* ለቦት እና ለኮፒራይት ቦታ */
+            box-sizing: border-box;
+        }
+
+        /* Header UI */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            color: var(--white);
+            padding: 20px 15px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            margin: 0 0 5px 0;
+        }
+
+        .header p {
+            font-size: 13px;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* Card System */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .status-badge {
+            background-color: #dcfce7;
+            color: #15803d;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Rules List */
+        .rules-list {
+            padding-left: 0;
+            list-style: none;
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .rules-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        /* Action Button */
+        .btn-close {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--text-dark);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(30, 41, 59, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-close:active {
+            transform: scale(0.98);
+        }
+
+        /* Floating Animated AI Chat Bot Icon */
+        .floating-bot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0088cc, #0056b3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            animation: pulse-bounce 2.5s infinite ease-in-out;
+        }
+
+        .floating-bot span {
+            font-size: 28px;
+        }
+
+        @keyframes pulse-bounce {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.05);
+            }
+        }
+
+        /* Footer Copyright Section */
+        .footer-copyright {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #cbd5e1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .footer-copyright b {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <h1>🏛️ የኮተቤ እድር መተግበሪያ</h1>
+        <p>የአባላት ዲጂታል መረጃ እና አገልግሎት መስጫ</p>
+    </div>
+
+    <!-- Member Info Card -->
+    <div class="card">
+        <h3>👤 የአባልነት መረጃ</h3>
+        <div class="info-row">
+            <span class="info-label">የእድር ስም፦</span>
+            <span class="info-value">ኮተቤ እድር</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">የአባልነት ሁኔታ፦</span>
+            <span class="status-badge">✅ ተረጋግጧል</span>
+        </div>
+    </div>
+
+    <!-- Payment Info Card -->
+    <div class="card">
+        <h3>💳 የክፍያ እና የቴሌብር መረጃ</h3>
+        <div class="info-row">
+            <span class="info-label">ወርሃዊ ክፍያ፦</span>
+            <span class="info-value">200 ብር</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">የቴሌብር ስም፦</span>
+            <span class="info-value">sibhat</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">የቴሌብር ቁጥር፦</span>
+            <span class="info-value">0988870084</span>
+        </div>
+    </div>
+
+    <!-- Rules Card -->
+    <div class="card">
+        <h3>📜 የእድር ደንቦች ማጠቃለያ</h3>
+        <ul class="rules-list">
+            <li>📌 ወርሃዊ ክፍያ በየወሩ እስከ 30ኛው ቀን መከፈል አለበት።</li>
+            <li>⚠️ ከቀን 30 በኋላ የሚደረግ ክፍያ 50 ብር ቅጣት ያስከትላል።</li>
+            <li>🚨 የሀዘን ጥሪ ሲኖራችሁ በ 2 ሰዓት ውስጥ መገኘት ግዴታ ነው።</li>
+        </ul>
+    </div>
+
+    <button class="btn-close" onclick="Telegram.WebApp.close()">ተመልስ / መተግበሪያውን ዝጋ</button>
+
+    <!-- Animated Floating AI Chat Bot Icon -->
+    <div class="floating-bot" onclick="alert('ስለ እድሩ ህጎች ማንኛውንም ጥያቄ በቦቱ ቻት መስኮት ላይ መፃፍ ይችላሉ!')">
+        <span>🤖</span>
+    </div>
+
+    <!-- Footer Copyright Section -->
+    <div class="footer-copyright">
+        <p>Copyright © <b>Leamlak Sibhat (ለ አምላክ ስብሐት)</b> | 2026 G.C (፪፰፪፮ ዓ.ም)</p>
+        <p>ለ ኮተቤ እድር የተሰራ መተግበሪያ</p>
+    </div>
+
+</body>
+</html>
