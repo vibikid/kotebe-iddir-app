@@ -3,245 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ኮተቤ እድር Mini App</title>
+    <title>ኮተቤ እድር (Kotebe Iddir Mini App)</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --primary-blue: #0088cc;
-            --accent-blue: #0056b3;
-            --bg-light: #f0f4f8;
+            --primary: #0088cc;
+            --primary-dark: #0056b3;
+            --dark: #0f172a;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --white: #ffffff;
-            --success-green: #22c55e;
+            --text: #1e293b;
+            --muted: #64748b;
+            --danger: #ef4444;
+            --success: #16a34a;
         }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             padding: 16px;
-            padding-bottom: 80px; /* ለቦት እና ለኮፒራይት ቦታ */
-            box-sizing: border-box;
+            padding-bottom: 90px;
         }
 
-        /* Header UI */
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
-            color: var(--white);
-            padding: 20px 15px;
-            border-radius: 16px;
+        /* Hero / Abstract Section Animation */
+        .hero-banner {
+            background: linear-gradient(135deg, #0088cc, #003366);
+            color: white;
+            padding: 22px 16px;
+            border-radius: 18px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
-            margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.3);
+            margin-bottom: 18px;
+            animation: fadeInDown 0.8s ease-out;
         }
-
-        .header h1 {
-            font-size: 22px;
-            margin: 0 0 5px 0;
+        .hero-banner h1 {
+            font-size: 21px;
+            margin: 0 0 8px 0;
+            font-weight: 800;
         }
-
-        .header p {
+        .hero-banner p {
             font-size: 13px;
             margin: 0;
-            opacity: 0.9;
+            opacity: 0.95;
+            line-height: 1.5;
         }
 
-        /* Card System */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .card {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
         }
-
         .card h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: var(--text-dark);
-            border-bottom: 2px solid var(--bg-light);
-            padding-bottom: 10px;
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            color: var(--dark);
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
         }
-
         .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 12px 0;
-            font-size: 14px;
-        }
-
-        .info-label {
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .info-value {
-            font-weight: bold;
-            color: var(--text-dark);
-        }
-
-        .status-badge {
-            background-color: #dcfce7;
-            color: #15803d;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Rules List */
-        .rules-list {
-            padding-left: 0;
-            list-style: none;
-            margin: 0;
+            margin: 10px 0;
             font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.6;
         }
 
-        .rules-list li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
+        /* Buttons Style */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(0, 136, 204, 0.2);
         }
-
-        /* Action Button */
         .btn-close {
             display: block;
             width: 100%;
-            padding: 14px;
-            background-color: var(--text-dark);
-            color: var(--white);
+            padding: 13px;
+            background-color: var(--dark);
+            color: white;
             border: none;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(30, 41, 59, 0.2);
-            transition: transform 0.2s;
+            margin-top: 18px;
         }
 
-        .btn-close:active {
-            transform: scale(0.98);
+        .collapsible-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
-        /* Floating Animated AI Chat Bot Icon */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Floating AI Bot Widget */
         .floating-bot {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 22px;
+            right: 22px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #0088cc, #0056b3);
+            background: linear-gradient(135deg, #0088cc, #004488);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.45);
             cursor: pointer;
+            animation: floatBounce 2.5s infinite ease-in-out;
             z-index: 1000;
-            animation: pulse-bounce 2.5s infinite ease-in-out;
+        }
+        .floating-bot span { font-size: 28px; }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
         }
 
-        .floating-bot span {
-            font-size: 28px;
+        /* In-App AI Chat Overlay */
+        .chat-overlay {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            left: 20px;
+            max-width: 380px;
+            margin: 0 auto;
+            height: 430px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+            border: 1px solid #cbd5e1;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+            animation: popUp 0.3s ease-out;
         }
 
-        @keyframes pulse-bounce {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-8px) scale(1.05);
-            }
+        @keyframes popUp {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Footer Copyright Section */
+        .chat-header {
+            background: linear-gradient(135deg, #0088cc, #0056b3);
+            color: white;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            font-size: 13px;
+            background-color: #f8fafc;
+        }
+        .chat-msg {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            line-height: 1.4;
+            max-width: 85%;
+        }
+        .chat-msg.user {
+            background: #0088cc;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-msg.ai {
+            background: #e2e8f0;
+            color: var(--dark);
+            margin-right: auto;
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+        }
+        .chat-input-area button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            margin-left: 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .footer-copyright {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px dashed #cbd5e1;
+            margin-top: 25px;
             text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .footer-copyright b {
-            color: var(--text-dark);
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
-    <div class="header">
-        <h1>🏛️ የኮተቤ እድር መተግበሪያ</h1>
-        <p>የአባላት ዲጂታል መረጃ እና አገልግሎት መስጫ</p>
+    <!-- Hero / Abstract Banner -->
+    <div class="hero-banner">
+        <h1>🏛️ እንኳን ወደ ኮተቤ እድር በሰላም መጡ</h1>
+        <p>(Welcome to Kotebe Iddir Digital Platform)</p>
+        <p style="font-size:11px; margin-top:6px; opacity:0.85;">
+            የአባላትን መረጃ፣ ክፍያዎች እና አጠቃላይ እድራዊ እንቅስቃሴዎችን በዲጂታል መንገድ ለማስተዳደር የተዘጋጀ ዘመናዊ መተግበሪያ።
+        </p>
     </div>
 
-    <!-- Member Info Card -->
+    <!-- የአባል መረጃ (Member Profile) -->
     <div class="card">
-        <h3>👤 የአባልነት መረጃ</h3>
+        <h3>👤 የአባል መረጃ (Member Profile)</h3>
         <div class="info-row">
-            <span class="info-label">የእድር ስም፦</span>
-            <span class="info-value">ኮተቤ እድር</span>
+            <span style="color:var(--muted)">ስም (Name)፦</span>
+            <b id="user-name">በመጫን ላይ... (Loading...)</b>
         </div>
         <div class="info-row">
-            <span class="info-label">የአባልነት ሁኔታ፦</span>
-            <span class="status-badge">✅ ተረጋግጧል</span>
+            <span style="color:var(--muted)">ሁኔታ (Status)፦</span>
+            <b style="color:var(--success)">✅ የጸደቀ አባል (Approved Member)</b>
         </div>
     </div>
 
-    <!-- Payment Info Card -->
+    <!-- የክፍያ እና የቴሌብር መረጃ (Payment Details) -->
     <div class="card">
-        <h3>💳 የክፍያ እና የቴሌብር መረጃ</h3>
-        <div class="info-row">
-            <span class="info-label">ወርሃዊ ክፍያ፦</span>
-            <span class="info-value">200 ብር</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">የቴሌብር ስም፦</span>
-            <span class="info-value">sibhat</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">የቴሌብር ቁጥር፦</span>
-            <span class="info-value">0988870084</span>
+        <h3>💳 የክፍያ መረጃ (Payment Details)</h3>
+        <button class="btn-action" onclick="toggleDetails('payment-details')">
+            መረጃውን ለማየት ይጫኑ (View Details)
+        </button>
+        <div id="payment-details" class="collapsible-content">
+            <div class="info-row">
+                <span style="color:var(--muted)">ወርሃዊ ክፍያ (Monthly Fee)፦</span>
+                <b>100 ብር (ETB)</b>
+            </div>
+            <div class="info-row">
+                <span style="color:var(--muted)">የተቀባይ ስም (Receiver Name)፦</span>
+                <b>sibhat</b>
+            </div>
+            <div class="info-row">
+                <span style="color:var(--muted)">የቴሌብር ቁጥር (Telebirr No)፦</span>
+                <b>0988870084</b>
+            </div>
+            <button class="btn-action" style="background:var(--success);" onclick="payTelebirr()">
+                📱 አሁን በቴሌብር ክፈል (Pay with Telebirr)
+            </button>
         </div>
     </div>
 
-    <!-- Rules Card -->
+    <!-- የአባላት ዝርዝር እና ድምፅ መስጫ (Member List & Voting) -->
     <div class="card">
-        <h3>📜 የእድር ደንቦች ማጠቃለያ</h3>
-        <ul class="rules-list">
-            <li>📌 ወርሃዊ ክፍያ በየወሩ እስከ 30ኛው ቀን መከፈል አለበት።</li>
-            <li>⚠️ ከቀን 30 በኋላ የሚደረግ ክፍያ 50 ብር ቅጣት ያስከትላል።</li>
-            <li>🚨 የሀዘን ጥሪ ሲኖራችሁ በ 2 ሰዓት ውስጥ መገኘት ግዴታ ነው።</li>
-        </ul>
+        <h3>👥 የአባላት ዝርዝር (Member List & Voting)</h3>
+        <button class="btn-action" onclick="toggleDetails('members-list')">
+            አባላትን ይመልከቱ / ድምፅ ይስጡ (View Members / Vote)
+        </button>
+        <div id="members-list" class="collapsible-content">
+            <p style="font-size:11px; color:var(--muted); margin-bottom:8px;">
+                ደንብ የጣሰ አባልን ለማገድ/ለማስወገድ በምክንያት ጥቆማ መስጠት ይችላሉ፦
+            </p>
+            <button class="btn-action" style="background:var(--danger);" onclick="voteSuspend()">
+                ⚠️ አባል ላይ ጥቆማ/ድምፅ ስጥ (Report/Vote Out Member)
+            </button>
+        </div>
     </div>
 
-    <button class="btn-close" onclick="Telegram.WebApp.close()">ተመልስ / መተግበሪያውን ዝጋ</button>
+    <!-- የሊቀመንበሩ ልዩ ፓነል (Chairman Panel) -->
+    <div class="card" id="chairman-panel" style="display:none; border: 1.5px solid var(--primary);">
+        <h3>👑 የሊቀመንበሩ ልዩ ፓነል (Chairman Panel)</h3>
+        <p style="font-size:11px; color:var(--muted); margin-bottom:8px;">
+            ለእድሩ አባላት በሙሉ አዲስ መልእክት/ማስታወቂያ ማስተላለፍ ይፈልጋሉ?
+        </p>
+        <button class="btn-action" style="background:var(--primary-dark);" onclick="broadcastMessage()">
+            📢 መልእክት ለሁሉም አባላት ላክ (Broadcast Message to All)
+        </button>
+    </div>
 
-    <!-- Animated Floating AI Chat Bot Icon -->
-    <div class="floating-bot" onclick="alert('ስለ እድሩ ህጎች ማንኛውንም ጥያቄ በቦቱ ቻት መስኮት ላይ መፃፍ ይችላሉ!')">
+    <button class="btn-close" onclick="Telegram.WebApp.close()">
+        ተመልስ / መተግበሪያውን ዝጋ (Close App)
+    </button>
+
+    <!-- ተንቀሳቃሽ AI አሲስታንት (Floating AI Widget) -->
+    <div class="floating-bot" onclick="toggleAIChat()">
         <span>🤖</span>
     </div>
 
-    <!-- Footer Copyright Section -->
-    <div class="footer-copyright">
-        <p>Copyright © <b>Leamlak Sibhat (ለ አምላክ ስብሐት)</b> | 2026 G.C (፪፰፪፮ ዓ.ም)</p>
-        <p>ለ ኮተቤ እድር የተሰራ መተግበሪያ</p>
+    <!-- In-App AI Chat Overlay -->
+    <div class="chat-overlay" id="chat-widget">
+        <div class="chat-header">
+            <span>🤖 AI ረዳት (Smart Assistant)</span>
+            <span style="cursor:pointer; font-size:16px;" onclick="toggleAIChat()">✖</span>
+        </div>
+        <div class="chat-body" id="chat-messages">
+            <div class="chat-msg ai">
+                ሰላም! ስለ እድሩ ህግጋት፣ ወርሃዊ ክፍያ (100 ብር)፣ ቅጣቶች ወይም ማንኛውንም አይነት አጠቃላይ ጥያቄ እዚህ መጠየቅ ይችላሉ።
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="ማንኛውንም ጥያቄ ይጻፉ..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendAIMessage()">ላክ</button>
+        </div>
     </div>
 
+    <div class="footer-copyright">
+        <p>Copyright © <b>Leamlak Sibhat (ለ አምላክ ስብሐት)</b> | 2026 G.C (፪፰፪፮ ዓ.ም)</p>
+        <p>ለ ኮተቤ እድር የተሰራ መተግበሪያ (Developed for Kotebe Iddir)</p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        const CHAIRMAN_ID = 863140890;
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            document.getElementById('user-name').innerText = user.first_name + " " + (user.last_name || "");
+            
+            if (user.id === CHAIRMAN_ID) {
+                document.getElementById('chairman-panel').style.display = 'block';
+            }
+        } else {
+            document.getElementById('user-name').innerText = "የእድር አባል (Iddir Member)";
+        }
+
+        function toggleDetails(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === "block") ? "none" : "block";
+        }
+
+        function toggleAIChat() {
+            const chat = document.getElementById('chat-widget');
+            chat.style.display = (chat.style.display === "flex") ? "none" : "flex";
+        }
+
+        function payTelebirr() {
+            tg.sendData("action:pay_telebirr");
+            tg.close();
+        }
+
+        function voteSuspend() {
+            tg.sendData("action:vote_suspend");
+            tg.close();
+        }
+
+        function broadcastMessage() {
+            tg.sendData("action:broadcast_msg");
+            tg.close();
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // AI Smart Response Integration
+            setTimeout(() => {
+                let reply = "ጥያቄዎ ደርሶኛል! ስለ እድሩ ክፍያ፣ ደንቦች ወይም ማንኛውም ጉዳይ ተጨማሪ ማብራሪያ ከፈለጉ ለመርዳት ዝግጁ ነኝ።";
+                
+                if (msg.includes("ክፍያ") || msg.includes("ብር") || msg.includes("pay")) {
+                    reply = "የእድሩ ወርሃዊ ክፍያ 100 ብር ሲሆን እስከ ወሩ 30ኛው ቀን በቴሌብር (0988870084 - sibhat) መከፈል አለበት።";
+                } else if (msg.includes("ቅጣት") || msg.includes("penalty")) {
+                    reply = "ወርሃዊ ክፍያ ከወሩ 30ኛው ቀን ካለፈ 50 ብር አውቶማቲክ ቅጣት ይታሰባል።";
+                }
+
+                chatMessages.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 500);
+        }
+    </script>
 </body>
 </html>
