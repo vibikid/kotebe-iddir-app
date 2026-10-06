@@ -75,7 +75,6 @@
         }
         .card-purple { background: var(--card-purple); border: 1px solid var(--accent-purple); }
         .card-blue { background: var(--card-blue); border: 1px solid var(--accent-blue); }
-        .card-gold { background: #451a03; border: 1px solid var(--yellow-gold); }
 
         .card h3 {
             margin: 0 0 12px 0;
@@ -106,7 +105,7 @@
             font-weight: bold;
         }
 
-        input, textarea {
+        input {
             width: 100%;
             padding: 10px 12px;
             margin-bottom: 8px;
@@ -133,7 +132,6 @@
             margin-top: 10px;
         }
         .btn-purple { background: linear-gradient(90deg, #a855f7, #7e22ce); color: white; }
-        .btn-danger { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -206,45 +204,36 @@
 </head>
 <body>
 
-    <div id="auth-overlay">
+    <div id="auth-overlay" style="display:none;">
         <div class="auth-box">
             <h2>🔑 የመግቢያና ምዝገባ ገጽ</h2>
-            <p style="font-size:12px; color:#cbd5e1; margin-bottom:12px;" id="auth-instruction">
-                የመግቢያ ፓስዎርድዎን <b>ከድሮዎቹ የእድሩ አባላት</b> በመጠየቅ ያስገቡ፦
+            <p style="font-size:12px; color:#cbd5e1; margin-bottom:12px;">
+                የመግቢያ ፓስዎርድዎን ከድሮዎቹ የእድሩ አባላት በመጠየቅ ያስገቡ፦
             </p>
             
             <div id="step-passcode">
-                <input type="text" id="input-passcode" placeholder="ፓስዎርድ (121621)" style="text-align:center; font-weight:bold;">
-                <button class="btn-action" onclick="checkPasscode()">አረጋግጥ</button>
+                <input type="password" id="input-passcode" placeholder="ፓስዎርድ ያስገቡ" style="text-align:center;">
+                <button class="btn-action" onclick="verifyPasscode()">አረጋግጥ</button>
                 <div id="passcode-error" style="color:var(--danger); font-size:12px; margin-top:10px; display:none;">
                     ❌ የተሳሳተ ፓስዎርድ ነው!
                 </div>
             </div>
 
             <div id="step-form" style="display:none;">
-                <div style="color:var(--success); font-weight:bold; font-size:15px; margin-bottom:10px;">🎉 Great! ኮዱ ትክክል ነው።</div>
-                
                 <label>👤 የራስዎ ሙሉ ስም፦</label>
-                <input type="text" id="input-full-name" placeholder="ለምሳሌ፦ አበበ ከበደ">
-
+                <input type="text" id="input-full-name" placeholder="አበበ ከበደ">
                 <label>📱 የራስዎ ስልክ ቁጥር፦</label>
                 <input type="tel" id="input-phone" placeholder="09........">
-
-                <label>💍/👥 የትዳር አጋር ወይም የቅርብ ዘመድ ሙሉ ስም፦</label>
-                <input type="text" id="input-relative-name" placeholder="የባለቤት ወይም የቅርብ ዘመድ ስም">
-
-                <label>📞 የትዳር አጋር ወይም የቅርብ ዘመድ ስልክ ቁጥር፦</label>
+                <label>💍/👥 የትዳር አጋር/ዘመድ ስም፦</label>
+                <input type="text" id="input-relative-name" placeholder="የዘመድ ስም">
+                <label>📞 የዘመድ ስልክ ቁጥር፦</label>
                 <input type="tel" id="input-relative-phone" placeholder="09........">
-
                 <button class="btn-action btn-purple" onclick="submitRegistration()">ለሊቀመንበሩ ማረጋገጫ ላክ</button>
             </div>
 
             <div id="step-pending" style="display:none;">
-                <div style="font-size:40px; margin-bottom:10px;">⏳</div>
-                <h3 style="color:var(--text-gold); margin:0;">ጥያቄዎ ተልኳል!</h3>
-                <p style="font-size:12px; color:#cbd5e1; margin-top:10px;">
-                    መረጃዎ ለሊቀመንበሩ 863140890 ደርሷል።
-                </p>
+                <h3 style="color:var(--text-gold);">ጥያቄዎ ተልኳል!</h3>
+                <p style="font-size:12px; color:#cbd5e1;">ሊቀመንበሩ ሲያጸድቁት መግባት ይችላሉ።</p>
             </div>
         </div>
     </div>
@@ -257,7 +246,7 @@
     <div id="tab-home" class="tab-content active">
         <div class="card card-purple">
             <h3>📜 ስለ እድሩ አጠቃላይ መረጃ</h3>
-            <p style="font-size:13px; line-height:1.6;">እንኳን ወደ **ኮተቤ እድር** በሰላም መጡ!</p>
+            <p style="font-size:13px; line-height:1.6;">እንኳን ወደ ኮተቤ እድር በሰላም መጡ!</p>
         </div>
     </div>
 
@@ -272,13 +261,11 @@
     <div id="tab-profile" class="tab-content">
         <div class="card card-purple">
             <h3>👤 የግል መለያ መረጃ</h3>
-            <div class="info-row"><span>ስም፦</span><b id="user-name">ለዓምላክ ስብሐት</b></div>
+            <div class="info-row"><span>መለያ ID፦</span><b id="lbl-userid">-</b></div>
         </div>
     </div>
 
-    <div class="floating-bot" onclick="toggleAIChat()">
-        <span>🤖</span>
-    </div>
+    <div class="floating-bot" onclick="toggleAIChat()"><span>🤖</span></div>
 
     <div class="chat-overlay" id="chat-widget">
         <div class="chat-header">
@@ -286,7 +273,7 @@
             <span style="cursor:pointer;" onclick="toggleAIChat()">✖</span>
         </div>
         <div class="chat-body" id="chat-messages">
-            <div class="msg-bubble ai">ሰላም! እኔ የኮተቤ እድር AI ረዳት ነኝ። ማንኛውንም ጥያቄ መጠየቅ ይችላሉ!</div>
+            <div class="msg-bubble ai">ሰላም! እኔ የኮተቤ እድር AI ረዳት ነኝ።</div>
         </div>
         <div style="display:flex; padding:10px; background:#090d16;">
             <input type="text" id="chat-input" placeholder="ጥያቄዎን ይጻፉ..." style="margin:0;" onkeypress="if(event.key==='Enter') sendAIMessage()">
@@ -305,14 +292,22 @@
         tg.ready();
         tg.expand();
 
-        // 🔑 የተካተቱ ትክክለኛ ቁልፎች እና መረጃዎች
-        const API_KEY = "AQ.Ab8RN6IKE89UvFNLJrQ3_eOPwt3m88rtL-klyu9ZfuvzfmAfJg";
-        const MEMBER_PASSCODE = "121621";
-        const CHAIRMAN_CHAT_ID = "863140890";
+        const CHAIRMAN_ID = 863140890;
+        const CORRECT_PASS = "121621";
+        const userId = tg.initDataUnsafe?.user?.id;
+        
+        document.getElementById('lbl-userid').innerText = userId || "Guest";
 
-        function checkPasscode() {
-            const inputCode = document.getElementById("input-passcode").value.trim();
-            if (inputCode === MEMBER_PASSCODE) {
+        if (userId !== CHAIRMAN_ID) {
+            const isApproved = localStorage.getItem("kotebe_approved_" + userId);
+            if (!isApproved) {
+                document.getElementById("auth-overlay").style.display = "flex";
+            }
+        }
+
+        function verifyPasscode() {
+            const val = document.getElementById("input-passcode").value.trim();
+            if (val === CORRECT_PASS) {
                 document.getElementById("step-passcode").style.display = "none";
                 document.getElementById("step-form").style.display = "block";
             } else {
@@ -321,22 +316,21 @@
         }
 
         function submitRegistration() {
-            const fullName = document.getElementById("input-full-name").value.trim();
+            const name = document.getElementById("input-full-name").value.trim();
             const phone = document.getElementById("input-phone").value.trim();
-            const relativeName = document.getElementById("input-relative-name").value.trim();
-            const relativePhone = document.getElementById("input-relative-phone").value.trim();
+            const relName = document.getElementById("input-relative-name").value.trim();
+            const relPhone = document.getElementById("input-relative-phone").value.trim();
 
-            if (!fullName || !phone || !relativeName || !relativePhone) {
+            if (!name || !phone || !relName || !relPhone) {
                 return alert("እባክዎን ሁሉንም መረጃዎች ይሙሉ!");
             }
 
             tg.sendData(JSON.stringify({
                 type: "new_registration",
-                real_name: fullName,
+                real_name: name,
                 phone: phone,
-                relative_name: relativeName,
-                relative_phone: relativePhone,
-                chairman_id: CHAIRMAN_CHAT_ID
+                relative_name: relName,
+                relative_phone: relPhone
             }));
 
             document.getElementById("step-form").style.display = "none";
@@ -355,39 +349,29 @@
 
         async function sendAIMessage() {
             const input = document.getElementById('chat-input');
-            const userMsg = input.value.trim();
-            if (!userMsg) return;
+            const msg = input.value.trim();
+            if (!msg) return;
 
             const chatMessages = document.getElementById('chat-messages');
-            chatMessages.innerHTML += `<div class="msg-bubble user">${userMsg}</div>`;
+            chatMessages.innerHTML += `<div class="msg-bubble user">${msg}</div>`;
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const loadingId = 'ai-loading-' + Date.now();
-            chatMessages.innerHTML += `<div class="msg-bubble ai" id="${loadingId}">🤔 በማሰብ ላይ...</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const loadingId = 'ai-' + Date.now();
+            chatMessages.innerHTML += `<div class="msg-bubble ai" id="${loadingId}">...</div>`;
 
             try {
-                const systemPrompt = "እርስዎ የኮተቤ እድር AI ረዳት ነዎት። ማንኛውንም ጥያቄ በትክክል፣ በዝርዝር እና በትሁት አማርኛ ይመልሱ።";
-                
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AQ.Ab8RN6IKE89UvFNLJrQ3_eOPwt3m88rtL-klyu9ZfuvzfmAfJg`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{ text: `${systemPrompt}\n\nጥያቄ፦ ${userMsg}` }]
-                        }]
+                        contents: [{ parts: [{ text: `እርስዎ የኮተቤ እድር AI ረዳት ነዎት። 'Gemini' አትጥቀስ። ወርሃዊ ክፍያ 100 ብር፣ ቅጣት 50 ብር፣ ቴሌብር 0988870084 (sibhat)፣ ሊቀመንበር ለዓምላክ ስብሐት። ጥያቄ፦ ${msg}` }] }]
                     })
                 });
-
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    document.getElementById(loadingId).innerText = data.candidates[0].content.parts[0].text;
-                } else {
-                    document.getElementById(loadingId).innerText = "መልስ ማዘጋጀት አልተቻለም፣ እባክዎን ደግመው ይላኩ።";
-                }
-            } catch (err) {
-                document.getElementById(loadingId).innerText = "የኔትወርክ ችግር አጋጥሟል፣ እባክዎን ኢንተርኔትዎን ያረጋግጡ።";
+                const data = await res.json();
+                document.getElementById(loadingId).innerText = data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                document.getElementById(loadingId).innerText = "ስህተት አጋጥሟል።";
             }
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
